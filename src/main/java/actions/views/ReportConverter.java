@@ -24,7 +24,8 @@ public class ReportConverter {
                 rv.getTitle(),
                 rv.getContent(),
                 rv.getCreatedAt(),
-                rv.getUpdatedAt());
+                rv.getUpdatedAt(),
+                rv.getLikeCount()); //
     }
 
     /**
@@ -33,11 +34,9 @@ public class ReportConverter {
      * @return ReportViewのインスタンス
      */
     public static ReportView toView(Report r) {
-
         if (r == null) {
             return null;
         }
-
         return new ReportView(
                 r.getId(),
                 EmployeeConverter.toView(r.getEmployee()),
@@ -45,7 +44,8 @@ public class ReportConverter {
                 r.getTitle(),
                 r.getContent(),
                 r.getCreatedAt(),
-                r.getUpdatedAt());
+                r.getUpdatedAt(),
+                r.getLikeCount()); //
     }
 
     /**
@@ -76,7 +76,15 @@ public class ReportConverter {
         r.setContent(rv.getContent());
         r.setCreatedAt(rv.getCreatedAt());
         r.setUpdatedAt(rv.getUpdatedAt());
-
+        r.setLikeCount(rv.getLikeCount()); //
     }
-
+    public static void copyModelToView(Report r, ReportView rv) {
+        rv.setId(r.getId());
+        rv.setEmployee(EmployeeConverter.toView(r.getEmployee()));
+        rv.setReportDate(r.getReportDate());
+        rv.setTitle(r.getTitle());
+        rv.setCreatedAt(r.getCreatedAt());
+        rv.setUpdatedAt(r.getUpdatedAt());
+        rv.setLikeCount(r.getLikeCount()); //
+    }
 }

@@ -104,7 +104,7 @@ public class ReportAction extends ActionBase {
             //セッションからログイン中の従業員情報を取得
             EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
 
-            //パラメータの値をもとに日報情報のインスタンスを作成する
+          //パラメータの値をもとに日報情報のインスタンスを作成する
             ReportView rv = new ReportView(
                     null,
                     ev, //ログインしている従業員を、日報作成者として登録する
@@ -112,7 +112,8 @@ public class ReportAction extends ActionBase {
                     getRequestParam(AttributeConst.REP_TITLE),
                     getRequestParam(AttributeConst.REP_CONTENT),
                     null,
-                    null);
+                    null,
+                    0); //
 
             //日報情報登録
             List<String> errors = service.create(rv);
@@ -231,5 +232,24 @@ public class ReportAction extends ActionBase {
             }
         }
     }
+    public void updateLike() throws ServletException, IOException {
+
+        //idを条件に日報データを取得する
+        ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+
+        //いいねを加算する。
+        int cnt = rv.getLikeCount();
+        rv.setLikeCount(cnt + 1);
+
+        //いいねを更新する
+        service.update(rv);
+
+        //セッションにいいねしましたのフラッシュメッセージを設定
+        putSessionScope(AttributeConst.FLUSH, MessageConst.I_LIKE.getMessage());
+
+        //一覧画面にリダイレクト
+        redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
+    }
+
 
 }
